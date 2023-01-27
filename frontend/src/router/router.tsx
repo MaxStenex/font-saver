@@ -1,4 +1,4 @@
-import { RegisterPage } from "../pages";
+import { RegisterPage } from "@/pages";
 import { createBrowserRouter } from "react-router-dom";
 
 export const router = createBrowserRouter([

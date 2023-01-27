@@ -1,7 +1,7 @@
 import { RouterProvider } from "react-router-dom";
-import { router } from "./router";
-import { MainLayout } from "./layouts";
-import "./styles/global.css";
+import { router } from "@/router";
+import { MainLayout } from "@/layouts";
+import "@/styles/global.css";
 
 function App() {
   return (
