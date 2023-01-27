@@ -1,3 +1,31 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+input {
+  outline: none;
+}
+
+.field-wrapper {
+  @apply flex flex-col mb-3;
+}
+
+.field {
+  @apply border-gray-400 border-2 rounded px-2 py-1 w-full;
+}
+
+.field-label {
+  @apply text-gray-600 text-sm mb-1;
+}
+
+.btn {
+  @apply px-10 py-2 rounded border-2 font-bold text-base transition-all border-blue-800 text-center;
+}
+
+.primary-btn {
+  @apply btn text-white bg-blue-800 hover:bg-blue-900;
+}
+
+.secondary-btn {
+  @apply btn text-blue-800 bg-white hover:bg-gray-200;
+}
