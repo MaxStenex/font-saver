@@ -11,7 +11,7 @@ input {
 }
 
 .field {
-  @apply border-gray-400 border-2 rounded px-2 py-1 w-full;
+  @apply border-gray-400 border-2 rounded px-2 py-1 text-sm font-mono;
 }
 
 .field-label {

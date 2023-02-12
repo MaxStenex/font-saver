@@ -6,29 +6,29 @@ export const RegisterForm = () => {
     <AuthFormWrapper
       title="Register form"
       content={
-        <form>
-          <div className="flex">
-            <div className="field-wrapper mr-4">
+        <form className="flex flex-col">
+          <div className="flex gap-3">
+            <div className="field-wrapper flex-1">
               <span className="field-label">First Name</span>
-              <input type="text" className="field" />
+              <input type="text" className="field w-full" />
             </div>
-            <div className="field-wrapper">
+            <div className="field-wrapper flex-1">
               <span className="field-label">Last Name</span>
-              <input type="text" className="field" />
+              <input type="text" className="field w-full" />
             </div>
           </div>
           <div className="field-wrapper">
             <span className="field-label">Your email</span>
             <input className="field" type="email" />
           </div>
-          <div className="flex">
-            <div className="field-wrapper mr-4">
+          <div className="flex gap-3">
+            <div className="field-wrapper flex-1">
               <span className="field-label">Password</span>
-              <input className="field" type="password" />
+              <input className="field w-full" type="password" />
             </div>
-            <div className="field-wrapper">
+            <div className="field-wrapper flex-1">
               <span className="field-label">Confirm password</span>
-              <input className="field" type="password" />
+              <input className="field w-full" type="password" />
             </div>
           </div>
           <div className="mt-3 flex">
