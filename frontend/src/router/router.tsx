@@ -1,4 +1,4 @@
-import { LoginPage, RegisterPage } from "@/pages";
+import { HomePage, LoginPage, RegisterPage } from "@/pages";
 import { createBrowserRouter } from "react-router-dom";
 
 export const router = createBrowserRouter([
@@ -12,7 +12,11 @@ export const router = createBrowserRouter([
   },
   {
     path: "/",
-    element: <h1>Home page</h1>,
+    element: <HomePage />,
+  },
+  {
+    path: "/home",
+    element: <HomePage />,
   },
   {
     path: "*",
