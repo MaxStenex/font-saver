@@ -34,6 +34,7 @@ export const FontCard: React.FC<Props> = ({ baseClasses, name }) => {
         className="rounded-full w-9 h-9 border-2 border-gray-400 ml-4
         relative hover:bg-white"
         onClick={onSelectFontClick}
+        onDoubleClick={(e) => e.stopPropagation()}
       >
         {isSelected && (
           <img
