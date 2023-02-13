@@ -1,7 +1,4 @@
-type FontType = {
-  id: number | string;
-  name: string;
-};
+import { FontCard, type FontType } from "./FontCard";
 
 const dummyFontsData: FontType[] = [
   {
@@ -40,9 +37,7 @@ export const FontCards = () => {
           Add new font
         </li>
         {dummyFontsData.map((f) => (
-          <li className={cardClasses} key={f.id}>
-            {f.name}
-          </li>
+          <FontCard baseClasses={cardClasses} {...f} key={f.id} />
         ))}
       </ul>
     </div>
