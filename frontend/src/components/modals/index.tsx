@@ -1,1 +1,1 @@
-export { HelloModal } from "./Hello";
+export { AddNewFontModal } from "./AddNewFont";

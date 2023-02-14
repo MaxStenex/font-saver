@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useState } from "react";
+import { createContext, useCallback, useContext, useMemo, useState } from "react";
 
 type ModalComponentType = React.FC<any>;
 
@@ -33,10 +33,11 @@ export const useModal = <Props,>(Component?: React.FC<Props>) => {
   const { setModal } = useContext(ModalContext);
 
   const show = useCallback(
-    (params: Props) => {
+    (params?: Props) => {
       if (Component) {
+        const props = params ? params : {};
         // @ts-ignore
-        setModal(<Component {...params} />);
+        setModal(<Component {...props} />);
       }
     },
     [Component, setModal]
@@ -46,5 +47,5 @@ export const useModal = <Props,>(Component?: React.FC<Props>) => {
     setModal(null);
   }, [setModal]);
 
-  return { show, hide };
+  return useMemo(() => ({ show, hide }), [hide, show]);
 };

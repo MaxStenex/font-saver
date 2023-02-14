@@ -1,7 +1,7 @@
 import { checkMarkSvg } from "@/assets/icons";
+import { AddNewFontModal } from "@/components/modals";
 import { useModal } from "@/state/modal";
 import React, { useState } from "react";
-import { HelloModal } from "@/components/modals";
 
 export type FontType = {
   id: number | string;
@@ -14,14 +14,12 @@ type Props = {
 
 export const FontCard: React.FC<Props> = ({ baseClasses, name }) => {
   const [isSelected, setIsSelected] = useState(false);
-  const helloModal = useModal(HelloModal);
+  const addNewFontModal = useModal(AddNewFontModal);
 
   const onSelectFontClick = () => setIsSelected((prev) => !prev);
 
   const onFontCardDoubleClick = () => {
-    helloModal.show({
-      name: "Maxim",
-    });
+    addNewFontModal.show();
   };
 
   return (
