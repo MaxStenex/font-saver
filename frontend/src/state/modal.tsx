@@ -1,28 +1,45 @@
 import { createContext, useCallback, useContext, useMemo, useState } from "react";
 
-type ModalComponentType = React.ReactNode;
+type ModalComponentType = JSX.Element;
 
 type ModalStateType = {
-  setModal: React.Dispatch<React.SetStateAction<ModalComponentType | null>>;
+  addModal: (modal: ModalComponentType) => void;
+  removeModal: () => void;
 };
 
-const ModalContext = createContext<ModalStateType>({ setModal: () => {} });
+const ModalContext = createContext<ModalStateType>({
+  addModal: () => {},
+  removeModal: () => {},
+});
 
 type ProviderProps = {
   children: JSX.Element;
 };
 
 export const ModalProvider: React.FC<ProviderProps> = ({ children }) => {
-  const [modal, setModal] = useState<ModalComponentType | null>(null);
+  const [modals, setModals] = useState<ModalComponentType[]>([]);
+
+  const addModal = useCallback((modal: ModalComponentType) => {
+    setModals((prev) => [...prev, modal]);
+  }, []);
+
+  const removeModal = useCallback(() => {
+    setModals((prev) => {
+      const newModals = [...prev];
+      newModals.pop();
+      return newModals;
+    });
+  }, []);
 
   return (
     <ModalContext.Provider
       value={{
-        setModal,
+        addModal,
+        removeModal,
       }}
     >
       <>
-        {modal}
+        {modals.map((m) => m)}
         {children}
       </>
     </ModalContext.Provider>
@@ -34,20 +51,22 @@ type EmptyObject = {
 };
 
 export const useModal = <Props,>(Component: React.FC<Props>) => {
-  const { setModal } = useContext(ModalContext);
+  const { addModal, removeModal } = useContext(ModalContext);
 
   const show = useCallback(
     (...params: Props extends EmptyObject ? [undefined?] : [Props]) => {
       const props = params || {};
+      const key = crypto.randomUUID();
       // @ts-ignore
-      setModal(<Component {...props} />);
+      const component = <Component {...props} key={key} />;
+      addModal(component);
     },
-    [Component, setModal]
+    [Component, addModal]
   );
 
   const hide = useCallback(() => {
-    setModal(null);
-  }, [setModal]);
+    removeModal();
+  }, [removeModal]);
 
   return useMemo(() => ({ show, hide }), [hide, show]);
 };
