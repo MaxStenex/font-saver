@@ -6,6 +6,11 @@ input {
   outline: none;
 }
 
+input[type="file"],
+input[type="file"]::-webkit-file-upload-button {
+  cursor: pointer;
+}
+
 .field-wrapper {
   @apply flex flex-col mb-3;
 }
@@ -16,6 +21,10 @@ input {
 
 .field-label {
   @apply text-gray-600 text-sm mb-1;
+}
+
+.field-error {
+  @apply text-red-400 text-sm mt-1;
 }
 
 .btn {

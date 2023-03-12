@@ -1,3 +1,4 @@
+import { AddNewFontBtn } from "./AddNewFont";
 import { FontCard, type FontType } from "./FontCard";
 
 const dummyFontsData: FontType[] = [
@@ -31,11 +32,7 @@ export const FontCards = () => {
   return (
     <div className="mt-10">
       <ul className="flex flex-wrap gap-[calc(8%/3)] items-center">
-        <li
-          className={`${cardClasses} font-bold !text-base !bg-slate-300 hover:!bg-slate-400`}
-        >
-          Add new font
-        </li>
+        <AddNewFontBtn cardClasses={cardClasses} />
         {dummyFontsData.map((f) => (
           <FontCard baseClasses={cardClasses} {...f} key={f.id} />
         ))}
