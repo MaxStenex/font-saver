@@ -46,18 +46,12 @@ export const ModalProvider: React.FC<ProviderProps> = ({ children }) => {
   );
 };
 
-type EmptyObject = {
-  [K in any]: never;
-};
-
 export const useModal = <Props,>(Component: React.FC<Props>) => {
   const { addModal, removeModal } = useContext(ModalContext);
 
   const show = useCallback(
-    (...params: Props extends EmptyObject ? [undefined?] : [Props]) => {
-      const props = params || {};
+    (props: Props) => {
       const key = crypto.randomUUID();
-      // @ts-ignore
       const component = <Component {...props} key={key} />;
       addModal(component);
     },
