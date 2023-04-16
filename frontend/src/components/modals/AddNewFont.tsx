@@ -4,6 +4,7 @@ import React from "react";
 import { ModalWrapper } from "./Wrapper";
 import * as Yup from "yup";
 import { closeSvg } from "@/assets/icons";
+import { TextField } from "@/uikit/inputs";
 
 const validationSchema = Yup.object({
   fileName: Yup.string()
@@ -67,11 +68,7 @@ export const AddNewFontModal: React.FC = () => {
           </div>
         )}
 
-        <div className="field-wrapper mt-3">
-          <span className="field-label">File name</span>
-          <input {...formik.getFieldProps("fileName")} className="field" type="text" />
-          <span className="field-error">{formik.errors.fileName}</span>
-        </div>
+        <TextField label="File name" {...formik.getFieldProps("fileName")} />
 
         <button className="primary-btn w-full mt-5" type="submit">
           Upload

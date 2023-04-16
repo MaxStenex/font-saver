@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { AuthFormWrapper } from "./FormWrapper";
+import { TextField } from "@/uikit/inputs";
 
 export const RegisterForm = () => {
   return (
@@ -7,33 +8,26 @@ export const RegisterForm = () => {
       title="Register form"
       content={
         <form className="flex flex-col">
-          <div className="flex gap-3">
-            <div className="field-wrapper flex-1">
-              <span className="field-label">First Name</span>
-              <input type="text" className="field w-full" />
+          <TextField label="Email" type="email" />
+          <div className="flex justify-between">
+            <div className="flex-1 max-w-[48%]">
+              <TextField label="First Name" />
             </div>
-            <div className="field-wrapper flex-1">
-              <span className="field-label">Last Name</span>
-              <input type="text" className="field w-full" />
+            <div className="flex-1 max-w-[48%]">
+              <TextField label="Last Name" />
             </div>
           </div>
-          <div className="field-wrapper">
-            <span className="field-label">Your email</span>
-            <input className="field" type="email" />
-          </div>
-          <div className="flex gap-3">
-            <div className="field-wrapper flex-1">
-              <span className="field-label">Password</span>
-              <input className="field w-full" type="password" />
+          <div className="flex justify-between">
+            <div className="flex-1 max-w-[48%]">
+              <TextField label="Password" type="password" />
             </div>
-            <div className="field-wrapper flex-1">
-              <span className="field-label">Confirm password</span>
-              <input className="field w-full" type="password" />
+            <div className="flex-1 max-w-[48%]">
+              <TextField label="Confirm password" type="password" />
             </div>
           </div>
           <div className="mt-3 flex">
-            <button className="primary-btn mr-3 flex-[1_0_48%]">Register</button>
-            <Link to="/login" className="secondary-btn !px-0 w-48">
+            <button className="primary-btn mr-3 max-w-[48%] flex-1">Register</button>
+            <Link to="/login" className="secondary-btn flex-1 !px-0 max-w-[48%]">
               Have an account?
             </Link>
           </div>
