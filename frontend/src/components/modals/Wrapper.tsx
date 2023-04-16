@@ -20,7 +20,7 @@ export const ModalWrapper: React.FC<Props> = ({ children, title, closeModal }) =
           p-5"
         >
           <header className="relative flex items-center mb-6">
-            <h3 className="mr-6 font-bold text-3xl">{title}</h3>
+            <h3 className="mr-6 font-bold text-2xl">{title}</h3>
             <img
               src={closeSvg}
               className="w-5 h-5 absolute right-0 cursor-pointer"

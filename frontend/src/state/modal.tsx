@@ -1,4 +1,5 @@
 import { createContext, useCallback, useContext, useMemo, useState } from "react";
+import { EmptyObject } from "@/types/common";
 
 type ModalComponentType = JSX.Element;
 
@@ -50,9 +51,9 @@ export const useModal = <Props,>(Component: React.FC<Props>) => {
   const { addModal, removeModal } = useContext(ModalContext);
 
   const show = useCallback(
-    (props: Props) => {
+    (...[props]: Props extends EmptyObject ? [undefined?] : [Props]) => {
       const key = crypto.randomUUID();
-      const component = <Component {...props} key={key} />;
+      const component = <Component {...(props as Props)} key={key} />;
       addModal(component);
     },
     [Component, addModal]

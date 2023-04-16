@@ -5,6 +5,7 @@ import { ModalWrapper } from "./Wrapper";
 import * as Yup from "yup";
 import { closeSvg } from "@/assets/icons";
 import { TextField } from "@/uikit/inputs";
+import { ConfirmActionModal } from "./ConfirmAction";
 
 const validationSchema = Yup.object({
   fileName: Yup.string()
@@ -20,6 +21,9 @@ type FormValues = {
 
 export const AddNewFontModal: React.FC = () => {
   const { hide } = useModal(AddNewFontModal);
+  const { show: showConfirmActionModal, hide: hideConfirmActionModal } =
+    useModal(ConfirmActionModal);
+
   const formik = useFormik<FormValues>({
     initialValues: {
       fileName: "",
@@ -40,8 +44,24 @@ export const AddNewFontModal: React.FC = () => {
     formik.setFieldValue("file", file);
   };
 
+  const onModalCloseClick = () => {
+    const isHaveUnsavedChanges = Object.values(formik.values).some((val) => val);
+
+    if (isHaveUnsavedChanges) {
+      return showConfirmActionModal({
+        title: "You have unsaved changes",
+        postTitle: "Are you sure want to close this modal?",
+        onOkClick: () => {
+          hideConfirmActionModal();
+          hide();
+        },
+        onCancelClick: hideConfirmActionModal,
+      });
+    } else hide();
+  };
+
   return (
-    <ModalWrapper title="New font" closeModal={hide}>
+    <ModalWrapper title="Create new font" closeModal={onModalCloseClick}>
       <form onSubmit={formik.handleSubmit}>
         <button className="secondary-btn w-full relative">
           <input
