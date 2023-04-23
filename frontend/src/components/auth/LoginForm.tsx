@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import { AuthFormWrapper } from "./FormWrapper";
-import { TextField } from "@/uikit/inputs";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { FormField } from "../forms";
 
 const validationSchema = Yup.object({
   email: Yup.string().email("Email should be valid").required("Email is required"),
@@ -33,12 +33,8 @@ export const LoginForm = () => {
       title="Log in"
       content={
         <form onSubmit={formik.handleSubmit}>
-          <TextField {...formik.getFieldProps("email")} label="Email" type="email" />
-          <TextField
-            {...formik.getFieldProps("password")}
-            label="Password"
-            type="password"
-          />
+          <FormField formik={formik} label="Email" name="email" />
+          <FormField formik={formik} label="Password" name="password" type="password" />
           <div className="flex mt-3">
             <button type="submit" className="primary-btn mr-3 flex-[1_0_48%]">
               Login

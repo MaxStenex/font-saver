@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import { AuthFormWrapper } from "./FormWrapper";
-import { TextField } from "@/uikit/inputs";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { FormField } from "../forms";
 
 const validationSchema = Yup.object({
   email: Yup.string().email("Email should be valid").required("Email is required"),
@@ -16,13 +16,11 @@ const validationSchema = Yup.object({
     .min(7, "Minimum length is 7")
     .max(255, "Maximum length is 255")
     .required("Password is required"),
-  confirmPassword: Yup.string().test(
-    "Passwords match",
-    "Passwords must match",
-    function (value) {
+  confirmPassword: Yup.string()
+    .required("This field is required")
+    .test("Passwords match", "Passwords must match", function (value) {
       return this.parent.password === value;
-    }
-  ),
+    }),
 });
 
 type FormValues = {
@@ -55,27 +53,24 @@ export const RegisterForm = () => {
       title="Register form"
       content={
         <form className="flex flex-col" onSubmit={formik.handleSubmit}>
-          <TextField {...formik.getFieldProps("email")} label="Email" type="email" />
+          <FormField formik={formik} name="email" label="Email" type="email" />
           <div className="flex justify-between">
             <div className="flex-1 max-w-[48%]">
-              <TextField {...formik.getFieldProps("firstName")} label="First Name" />
+              <FormField formik={formik} name="firstName" label="First Name" />
             </div>
             <div className="flex-1 max-w-[48%]">
-              <TextField {...formik.getFieldProps("lastName")} label="Last Name" />
+              <FormField formik={formik} name="lastName" label="Last Name" />
             </div>
           </div>
           <div className="flex justify-between">
             <div className="flex-1 max-w-[48%]">
-              <TextField
-                {...formik.getFieldProps("password")}
-                label="Password"
-                type="password"
-              />
+              <FormField formik={formik} name="password" type="password" label="Email" />
             </div>
             <div className="flex-1 max-w-[48%]">
-              <TextField
-                {...formik.getFieldProps("confirmPassword")}
-                label="Confirm password"
+              <FormField
+                formik={formik}
+                name="confirmPassword"
+                label="Confirm Password"
                 type="password"
               />
             </div>
