@@ -17,7 +17,7 @@ export const ModalWrapper: React.FC<Props> = ({ children, title, closeModal }) =
         ></div>
         <div
           className="absolute-center !relative rounded w-96 bg-white h-96 max-h-full overflow-auto
-          p-5"
+          p-5 flex flex-col"
         >
           <header className="relative flex items-center mb-6">
             <h3 className="mr-6 font-bold text-2xl">{title}</h3>
