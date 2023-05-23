@@ -1,5 +1,6 @@
 import { FontType } from "@/types/font";
 import { SelectButton } from "@/uikit/buttons/SelectButton";
+import { classNames } from "@/utils/classNames";
 import React, { useState } from "react";
 
 type Props = {
@@ -13,7 +14,7 @@ export const FontCard: React.FC<Props> = ({ onClick, baseClasses, ...font }) => 
 
   return (
     <li
-      className={`${baseClasses} flex items-center select-none`}
+      className={classNames(baseClasses, "flex items-center select-none")}
       onClick={() => onClick(font)}
     >
       <span>{font.name}</span>

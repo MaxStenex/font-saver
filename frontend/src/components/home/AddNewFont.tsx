@@ -1,6 +1,7 @@
 import { useModal } from "@/state/modal";
 import React from "react";
 import { AddNewFontModal } from "../modals";
+import { classNames } from "@/utils/classNames";
 
 type Props = {
   cardClasses: string;
@@ -15,7 +16,10 @@ export const AddNewFontBtn: React.FC<Props> = ({ cardClasses }) => {
 
   return (
     <li
-      className={`${cardClasses} font-bold !text-base !bg-slate-300 hover:!bg-slate-400`}
+      className={classNames(
+        cardClasses,
+        "font-bold !text-base !bg-slate-300 hover:!bg-slate-400"
+      )}
       onClick={onAddNewFontClick}
     >
       Add new font
