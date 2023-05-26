@@ -1,8 +1,8 @@
-import { Link } from "react-router-dom";
-import { AuthFormWrapper } from "./FormWrapper";
 import { useFormik } from "formik";
+import { Link, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { FormField } from "../forms";
+import { AuthFormWrapper } from "./FormWrapper";
 
 const validationSchema = Yup.object({
   email: Yup.string().email("Email should be valid").required("Email is required"),
@@ -15,6 +15,8 @@ type FormValues = {
 };
 
 export const LoginForm = () => {
+  const navigate = useNavigate();
+
   const formik = useFormik<FormValues>({
     initialValues: {
       email: "",
@@ -22,7 +24,7 @@ export const LoginForm = () => {
     },
     validationSchema,
     onSubmit: async (values) => {
-      console.log(values);
+      navigate("/");
     },
     validateOnBlur: true,
     validateOnChange: false,
@@ -33,8 +35,14 @@ export const LoginForm = () => {
       title="Log in"
       content={
         <form onSubmit={formik.handleSubmit}>
-          <FormField formik={formik} label="Email" name="email" />
-          <FormField formik={formik} label="Password" name="password" type="password" />
+          <FormField data-testid="email" formik={formik} label="Email" name="email" />
+          <FormField
+            data-testid="password"
+            formik={formik}
+            label="Password"
+            name="password"
+            type="password"
+          />
           <div className="flex mt-3">
             <button type="submit" className="primary-btn mr-3 flex-[1_0_48%]">
               Login
