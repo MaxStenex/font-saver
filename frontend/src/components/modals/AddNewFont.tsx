@@ -88,7 +88,7 @@ export const AddNewFontModal: React.FC = () => {
           </div>
         )}
 
-        <FormField label="File name" formik={formik} name="fileName" />
+        <FormField label="Font name" formik={formik} name="fileName" />
 
         <button className="primary-btn w-full mt-5" type="submit">
           Upload
