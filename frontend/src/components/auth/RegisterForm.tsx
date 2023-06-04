@@ -6,15 +6,13 @@ import { FormField } from "../forms";
 
 const validationSchema = Yup.object({
   email: Yup.string().email("Email should be valid").required("Email is required"),
-  firstName: Yup.string()
-    .max(100, "Maximum length is 50")
-    .required("First name is required"),
-  lastName: Yup.string()
-    .max(100, "Maximum length is 50")
-    .required("Last name should be required"),
+  username: Yup.string()
+    .min(2, "Minimum length is 2")
+    .max(64, "Maximum length is 64")
+    .required("Username is required"),
   password: Yup.string()
-    .min(7, "Minimum length is 7")
-    .max(255, "Maximum length is 255")
+    .min(6, "Minimum length is 6")
+    .max(64, "Maximum length is 64")
     .required("Password is required"),
   confirmPassword: Yup.string()
     .required("This field is required")
@@ -25,8 +23,7 @@ const validationSchema = Yup.object({
 
 type FormValues = {
   email: string;
-  firstName: string;
-  lastName: string;
+  username: string;
   password: string;
   confirmPassword: string;
 };
@@ -35,8 +32,7 @@ export const RegisterForm = () => {
   const formik = useFormik<FormValues>({
     initialValues: {
       email: "",
-      firstName: "",
-      lastName: "",
+      username: "",
       password: "",
       confirmPassword: "",
     },
@@ -44,8 +40,6 @@ export const RegisterForm = () => {
     onSubmit: async (values) => {
       console.log(values);
     },
-    validateOnBlur: true,
-    validateOnChange: false,
   });
 
   return (
@@ -54,17 +48,15 @@ export const RegisterForm = () => {
       content={
         <form className="flex flex-col" onSubmit={formik.handleSubmit}>
           <FormField formik={formik} name="email" label="Email" type="email" />
+          <FormField formik={formik} name="username" label="Username" />
           <div className="flex justify-between">
             <div className="flex-1 max-w-[48%]">
-              <FormField formik={formik} name="firstName" label="First Name" />
-            </div>
-            <div className="flex-1 max-w-[48%]">
-              <FormField formik={formik} name="lastName" label="Last Name" />
-            </div>
-          </div>
-          <div className="flex justify-between">
-            <div className="flex-1 max-w-[48%]">
-              <FormField formik={formik} name="password" type="password" label="Email" />
+              <FormField
+                formik={formik}
+                name="password"
+                type="password"
+                label="Password"
+              />
             </div>
             <div className="flex-1 max-w-[48%]">
               <FormField
