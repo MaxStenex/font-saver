@@ -17,7 +17,7 @@ export const FormField = <T extends FormikValues>({
   return (
     <TextField
       label={label}
-      error={formik.errors[name] as string}
+      error={formik.touched[name] && String(formik.errors[name] || "")}
       {...formik.getFieldProps(name)}
       {...rest}
     />

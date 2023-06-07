@@ -26,8 +26,6 @@ export const LoginForm = () => {
     onSubmit: async (values) => {
       navigate("/");
     },
-    validateOnBlur: true,
-    validateOnChange: false,
   });
 
   return (
