@@ -15,11 +15,6 @@ class ConfigService {
     return value;
   }
 
-  public ensureValues(keys: string[]) {
-    keys.forEach((k) => this.getValue(k));
-    return this;
-  }
-
   public getPort() {
     return this.getValue("PORT");
   }
@@ -34,7 +29,7 @@ class ConfigService {
       password: this.getValue("DB_PASSWORD"),
       database: this.getValue("DB_NAME"),
 
-      entities: ["**/*.entity{.ts,.js}"],
+      entities: ["*.entity{.ts,.js}"],
 
       migrationsTableName: "migration",
 

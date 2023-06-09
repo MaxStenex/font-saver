@@ -1,2 +1,2 @@
-export * from "./font";
-export * from "./user";
+export * from "./font.entity";
+export * from "./user.entity";
