@@ -29,11 +29,10 @@ class ConfigService {
       password: this.getValue("DB_PASSWORD"),
       database: this.getValue("DB_NAME"),
 
-      entities: ["src/entities/*.entity{.ts,.js}"],
+      entities: ["dist/entities/**/*.js"],
+      migrations: ["dist/migration/**/*.js"],
 
       migrationsTableName: "migration",
-
-      migrations: ["src/migration/*.ts"],
     };
   }
 }
