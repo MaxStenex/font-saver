@@ -19,6 +19,10 @@ class ConfigService {
     return this.getValue("PORT");
   }
 
+  public getJwtSecretKey() {
+    return this.getValue("JWT_SECRET");
+  }
+
   public getTypeOrmConfig(): DataSourceOptions {
     return {
       type: "postgres",

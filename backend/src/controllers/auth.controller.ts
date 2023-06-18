@@ -1,5 +1,11 @@
-import { Body, Controller, Post } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  NotImplementedException,
+  Post,
+} from "@nestjs/common";
 import { RegisterUserDto } from "src/dtos";
+import { LoginDto } from "src/dtos/login.dto";
 import { AuthService } from "src/services";
 
 @Controller("auth")
@@ -9,5 +15,15 @@ export class AuthController {
   @Post("/register")
   register(@Body() dto: RegisterUserDto) {
     return this.authService.register(dto);
+  }
+
+  @Post("/login")
+  login(@Body() dto: LoginDto) {
+    throw new NotImplementedException();
+  }
+
+  @Post("/refresh-tokens")
+  refreshTokens() {
+    throw new NotImplementedException();
   }
 }
