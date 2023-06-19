@@ -3,6 +3,7 @@ import { JwtService } from "@nestjs/jwt";
 import { InjectRepository } from "@nestjs/typeorm";
 import * as bcrypt from "bcrypt";
 import { RegisterUserDto } from "src/dtos";
+import { LoginDto } from "src/dtos/login.dto";
 import { User } from "src/entities";
 import { UserJwtPayload } from "src/types/user";
 import { Repository } from "typeorm";
@@ -41,8 +42,19 @@ export class AuthService {
       username,
     });
     await this.userRepository.save(user);
-    delete user.password;
 
     return user;
+  }
+
+  async login({ email, password }: LoginDto) {
+    try {
+      const user = await this.userRepository.findOneByOrFail({
+        email,
+      });
+
+      return user;
+    } catch (error) {
+      throw new UnauthorizedException();
+    }
   }
 }

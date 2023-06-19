@@ -1,8 +1,10 @@
 import {
   Body,
+  ClassSerializerInterceptor,
   Controller,
   NotImplementedException,
   Post,
+  UseInterceptors,
 } from "@nestjs/common";
 import { RegisterUserDto } from "src/dtos";
 import { LoginDto } from "src/dtos/login.dto";
@@ -12,14 +14,16 @@ import { AuthService } from "src/services";
 export class AuthController {
   constructor(private authService: AuthService) {}
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Post("/register")
   register(@Body() dto: RegisterUserDto) {
     return this.authService.register(dto);
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Post("/login")
   login(@Body() dto: LoginDto) {
-    throw new NotImplementedException();
+    return this.authService.login(dto);
   }
 
   @Post("/refresh-tokens")
