@@ -4,8 +4,10 @@ import {
   Controller,
   NotImplementedException,
   Post,
+  Res,
   UseInterceptors,
 } from "@nestjs/common";
+import { Response } from "express";
 import { LoginDto } from "src/dtos/login.dto";
 import { AuthService } from "src/services";
 
@@ -15,8 +17,8 @@ export class AuthController {
 
   @UseInterceptors(ClassSerializerInterceptor)
   @Post("/login")
-  login(@Body() dto: LoginDto) {
-    return this.authService.login(dto);
+  login(@Res({ passthrough: true }) response: Response, @Body() dto: LoginDto) {
+    return this.authService.login({ ...dto, response });
   }
 
   @Post("/logout")

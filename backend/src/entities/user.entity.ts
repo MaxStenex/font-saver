@@ -1,5 +1,6 @@
 import { Exclude } from "class-transformer";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { RefreshSession } from "./refresh-session.entity";
 
 @Entity({ name: "user" })
 export class User {
@@ -15,4 +16,7 @@ export class User {
   @Exclude()
   @Column({ type: "varchar", length: 64 })
   password: string;
+
+  @OneToMany(() => RefreshSession, (rs) => rs.user)
+  refreshSessions: RefreshSession[];
 }
