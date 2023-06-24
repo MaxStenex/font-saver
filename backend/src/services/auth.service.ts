@@ -1,8 +1,6 @@
 import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { InjectRepository } from "@nestjs/typeorm";
-import * as bcrypt from "bcrypt";
-import { RegisterUserDto } from "src/dtos";
 import { LoginDto } from "src/dtos/login.dto";
 import { User } from "src/entities";
 import { UserJwtPayload } from "src/types/user";
@@ -31,19 +29,6 @@ export class AuthService {
     } catch (error) {
       throw new UnauthorizedException();
     }
-  }
-
-  async register({ email, password, username }: RegisterUserDto) {
-    const saltOrRounds = 10;
-    const hashedPassword = await bcrypt.hash(password, saltOrRounds);
-    const user = this.userRepository.create({
-      email,
-      password: hashedPassword,
-      username,
-    });
-    await this.userRepository.save(user);
-
-    return user;
   }
 
   async login({ email, password }: LoginDto) {
