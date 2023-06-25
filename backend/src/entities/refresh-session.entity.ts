@@ -13,7 +13,7 @@ export class RefreshSession {
   id: number;
 
   @PrimaryGeneratedColumn("uuid")
-  refreshToken: number;
+  refreshToken: string;
 
   @Column({ type: "bigint" })
   expiresIn: number;
