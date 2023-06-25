@@ -16,7 +16,7 @@ export class RefreshSession {
   refreshToken: string;
 
   @Column({ type: "bigint" })
-  expiresIn: number;
+  expiresIn: string;
 
   @CreateDateColumn()
   createdAt: Date;

@@ -2,7 +2,6 @@ import {
   Body,
   ClassSerializerInterceptor,
   Controller,
-  NotImplementedException,
   Post,
   Req,
   Res,
@@ -23,8 +22,14 @@ export class AuthController {
   }
 
   @Post("/logout")
-  logout() {
-    throw new NotImplementedException();
+  logout(
+    @Res({ passthrough: true }) response: Response,
+    @Req() request: Request,
+  ) {
+    return this.authService.logout({
+      response,
+      refreshToken: request.cookies[this.authService.refreshTokenCookieName],
+    });
   }
 
   @Post("/refresh-tokens")
@@ -33,7 +38,7 @@ export class AuthController {
     @Res({ passthrough: true }) response: Response,
   ) {
     return this.authService.refreshTokens({
-      refreshToken: request.cookies["refreshToken"],
+      refreshToken: request.cookies[this.authService.refreshTokenCookieName],
       response,
     });
   }

@@ -19,6 +19,8 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
+  refreshTokenCookieName = "refreshToken";
+
   async generateAccessToken(payload: UserJwtPayload) {
     return this.jwtService.sign(payload);
   }
@@ -29,8 +31,9 @@ export class AuthService {
     const refreshSession = this.refreshSessionRepository.create({
       refreshToken,
       user,
-      expiresIn:
+      expiresIn: String(
         new Date().getTime() + configService.getRefreshTokenExpiresInMs(),
+      ),
     });
 
     await this.refreshSessionRepository.save(refreshSession);
@@ -46,6 +49,14 @@ export class AuthService {
     }
   }
 
+  private getRefreshTokenCookieSettings(expiresIn: string) {
+    return {
+      httpOnly: true,
+      expires: new Date(Number(expiresIn)),
+      path: "/auth",
+    };
+  }
+
   private setRefreshTokenInCookies({
     refreshSession,
     response,
@@ -53,11 +64,11 @@ export class AuthService {
     refreshSession: RefreshSession;
     response: Response;
   }) {
-    response.cookie("refreshToken", refreshSession.refreshToken, {
-      httpOnly: true,
-      expires: new Date(refreshSession.expiresIn),
-      path: "/auth",
-    });
+    response.cookie(
+      this.refreshTokenCookieName,
+      refreshSession.refreshToken,
+      this.getRefreshTokenCookieSettings(refreshSession.expiresIn),
+    );
   }
 
   async login({
@@ -104,7 +115,7 @@ export class AuthService {
     }
 
     await this.refreshSessionRepository.remove(oldRefreshSession);
-    if (oldRefreshSession.expiresIn < new Date().getTime()) {
+    if (Number(oldRefreshSession.expiresIn) < new Date().getTime()) {
       throw new UnauthorizedException("Session is expired");
     }
 
@@ -121,5 +132,30 @@ export class AuthService {
     });
 
     return { accessToken };
+  }
+
+  async logout({
+    response,
+    refreshToken,
+  }: {
+    response: Response;
+    refreshToken: string;
+  }) {
+    if (!refreshToken) {
+      throw new UnauthorizedException("Refresh token not provided");
+    }
+
+    const refreshSession = await this.refreshSessionRepository.findOne({
+      where: { refreshToken },
+    });
+    if (!refreshSession) {
+      throw new UnauthorizedException("Refresh session not found");
+    }
+
+    response.clearCookie(
+      this.refreshTokenCookieName,
+      this.getRefreshTokenCookieSettings(refreshSession.expiresIn),
+    );
+    await this.refreshSessionRepository.remove(refreshSession);
   }
 }
