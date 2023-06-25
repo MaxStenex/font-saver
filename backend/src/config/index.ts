@@ -25,7 +25,7 @@ class ConfigService {
   }
 
   public getRefreshTokenExpiresInMs(): number {
-    const value = ms(this.getValue("REFRESH_TOKEN_EXPIRES_IN"));
+    const value = ms(this.getValue("REFRESH_TOKEN_EXPIRES_IN_MS"));
     if (typeof value !== "number") {
       throw new Error("REFRESH_TOKEN_EXPIRES_IN provides invalid value");
     }
@@ -47,6 +47,7 @@ class ConfigService {
       migrations: ["dist/migration/**/*.js"],
 
       migrationsTableName: "migration",
+      logging: true,
     };
   }
 }
