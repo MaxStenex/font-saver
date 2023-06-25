@@ -4,10 +4,11 @@ import {
   Controller,
   NotImplementedException,
   Post,
+  Req,
   Res,
   UseInterceptors,
 } from "@nestjs/common";
-import { Response } from "express";
+import { Request, Response } from "express";
 import { LoginDto } from "src/dtos/login.dto";
 import { AuthService } from "src/services";
 
@@ -27,7 +28,13 @@ export class AuthController {
   }
 
   @Post("/refresh-tokens")
-  refreshTokens() {
-    throw new NotImplementedException();
+  refreshTokens(
+    @Req() request: Request,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    return this.authService.refreshTokens({
+      refreshToken: request.cookies["refreshToken"],
+      response,
+    });
   }
 }

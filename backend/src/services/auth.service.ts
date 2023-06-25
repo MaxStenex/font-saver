@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  InternalServerErrorException,
-  UnauthorizedException,
-} from "@nestjs/common";
+import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { InjectRepository } from "@nestjs/typeorm";
 import * as bcrypt from "bcrypt";
@@ -27,7 +23,7 @@ export class AuthService {
     return this.jwtService.sign(payload);
   }
 
-  async generateRefreshToken({ user }: { user: User }) {
+  async generateRefreshSession({ user }: { user: User }) {
     const refreshToken = uuidv4();
 
     const refreshSession = this.refreshSessionRepository.create({
@@ -39,7 +35,7 @@ export class AuthService {
 
     await this.refreshSessionRepository.save(refreshSession);
 
-    return refreshSession.refreshToken;
+    return refreshSession;
   }
 
   async validateAccessToken(token: string) {
@@ -50,31 +46,80 @@ export class AuthService {
     }
   }
 
+  private setRefreshTokenInCookies({
+    refreshSession,
+    response,
+  }: {
+    refreshSession: RefreshSession;
+    response: Response;
+  }) {
+    response.cookie("refreshToken", refreshSession.refreshToken, {
+      httpOnly: true,
+      expires: new Date(refreshSession.expiresIn),
+      path: "/auth",
+    });
+  }
+
   async login({
     email,
     password,
     response,
   }: LoginDto & { response: Response }) {
-    try {
-      const invalidCredsError = new UnauthorizedException(
-        "Invalid email or password",
-      );
+    const invalidCredsError = new UnauthorizedException(
+      "Invalid email or password",
+    );
 
-      const user = await this.userRepository.findOneByOrFail({
-        email,
-      });
-      if (!user) return invalidCredsError;
+    const user = await this.userRepository.findOneByOrFail({
+      email,
+    });
+    if (!user) throw invalidCredsError;
 
-      const isValidPassword = await bcrypt.compare(password, user.password);
-      if (!isValidPassword) return invalidCredsError;
+    const isValidPassword = await bcrypt.compare(password, user.password);
+    if (!isValidPassword) throw invalidCredsError;
 
-      const refreshToken = await this.generateRefreshToken({ user });
-      const accessToken = await this.generateAccessToken({ id: user.id });
-      response.cookie("refreshToken", refreshToken);
+    const refreshSession = await this.generateRefreshSession({ user });
+    const accessToken = await this.generateAccessToken({ id: user.id });
+    this.setRefreshTokenInCookies({ refreshSession, response });
 
-      return { accessToken };
-    } catch (error) {
-      throw new InternalServerErrorException();
+    return { accessToken };
+  }
+
+  async refreshTokens({
+    refreshToken,
+    response,
+  }: {
+    refreshToken: string;
+    response: Response;
+  }) {
+    if (!refreshToken) {
+      throw new UnauthorizedException("Refresh token not provided");
     }
+
+    const oldRefreshSession = await this.refreshSessionRepository.findOne({
+      where: { refreshToken },
+      relations: ["user"],
+    });
+    if (!oldRefreshSession) {
+      throw new UnauthorizedException("Session not found");
+    }
+
+    await this.refreshSessionRepository.remove(oldRefreshSession);
+    if (oldRefreshSession.expiresIn < new Date().getTime()) {
+      throw new UnauthorizedException("Session is expired");
+    }
+
+    const user = await this.userRepository.findOneBy({
+      id: oldRefreshSession.user.id,
+    });
+    if (!user) throw new UnauthorizedException("User not found");
+
+    const newRefreshSession = await this.generateRefreshSession({ user });
+    const accessToken = await this.generateAccessToken({ id: user.id });
+    this.setRefreshTokenInCookies({
+      refreshSession: newRefreshSession,
+      response,
+    });
+
+    return { accessToken };
   }
 }
