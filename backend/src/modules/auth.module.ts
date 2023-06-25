@@ -11,11 +11,13 @@ import { configService } from "src/config";
     TypeOrmModule.forFeature([User, RefreshSession]),
     JwtModule.register({
       secret: configService.getJwtSecretKey(),
-      signOptions: { expiresIn: "15m" },
+      signOptions: {
+        expiresIn: configService.getAccessTokenExpiresInMs() / 1000,
+      },
     }),
   ],
   controllers: [AuthController],
   providers: [AuthService],
-  exports: [],
+  exports: [AuthService],
 })
 export class AuthModule {}

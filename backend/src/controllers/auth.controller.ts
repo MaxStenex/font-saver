@@ -9,12 +9,14 @@ import {
 } from "@nestjs/common";
 import { Request, Response } from "express";
 import { LoginDto } from "src/dtos/login.dto";
+import { Public } from "src/guards";
 import { AuthService } from "src/services";
 
 @Controller("auth")
 export class AuthController {
   constructor(private authService: AuthService) {}
 
+  @Public()
   @UseInterceptors(ClassSerializerInterceptor)
   @Post("/login")
   login(@Res({ passthrough: true }) response: Response, @Body() dto: LoginDto) {
@@ -32,6 +34,7 @@ export class AuthController {
     });
   }
 
+  @Public()
   @Post("/refresh-tokens")
   refreshTokens(
     @Req() request: Request,

@@ -2,7 +2,7 @@ import { ValidationPipe } from "@nestjs/common";
 import { HttpAdapterHost, NestFactory } from "@nestjs/core";
 import cookieParser from "cookie-parser";
 import { AppModule } from "./app.module";
-import { QueryErrorFilter } from "./filters/query-error.filter";
+import { QueryErrorFilter } from "./filters";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

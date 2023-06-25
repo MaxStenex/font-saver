@@ -25,9 +25,18 @@ class ConfigService {
   }
 
   public getRefreshTokenExpiresInMs(): number {
-    const value = ms(this.getValue("REFRESH_TOKEN_EXPIRES_IN_MS"));
+    const value = ms(this.getValue("REFRESH_TOKEN_EXPIRES_IN"));
     if (typeof value !== "number") {
       throw new Error("REFRESH_TOKEN_EXPIRES_IN provides invalid value");
+    }
+
+    return value;
+  }
+
+  public getAccessTokenExpiresInMs(): number {
+    const value = ms(this.getValue("ACCESS_TOKEN_EXPIRES_IN"));
+    if (typeof value !== "number") {
+      throw new Error("ACCESS_TOKEN_EXPIRES_IN provides invalid value");
     }
 
     return value;

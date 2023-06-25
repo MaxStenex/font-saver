@@ -41,11 +41,13 @@ export class AuthService {
     return refreshSession;
   }
 
-  async validateAccessToken(token: string) {
+  validateAccessToken(token: string): boolean {
     try {
-      return this.jwtService.verify(token);
+      this.jwtService.verify<UserJwtPayload>(token);
+
+      return true;
     } catch (error) {
-      throw new UnauthorizedException();
+      return false;
     }
   }
 
