@@ -1,8 +1,13 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthFormWrapper } from "./FormWrapper";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { FormField } from "../forms";
+import { RegisterDto } from "@/types/auth";
+import { authService } from "@/api";
+import { useState } from "react";
+import { ErrorMessage } from "../common";
+import { getApiErrorMessage } from "@/utils";
 
 const validationSchema = Yup.object({
   email: Yup.string().email("Email should be valid").required("Email is required"),
@@ -21,15 +26,11 @@ const validationSchema = Yup.object({
     }),
 });
 
-type FormValues = {
-  email: string;
-  username: string;
-  password: string;
-  confirmPassword: string;
-};
-
 export const RegisterForm = () => {
-  const formik = useFormik<FormValues>({
+  const [generalError, setGeneralError] = useState("");
+  const navigate = useNavigate();
+
+  const formik = useFormik<RegisterDto & { confirmPassword: string }>({
     initialValues: {
       email: "",
       username: "",
@@ -37,8 +38,24 @@ export const RegisterForm = () => {
       confirmPassword: "",
     },
     validationSchema,
-    onSubmit: async (values) => {
-      console.log(values);
+    onSubmit: async ({ email, password, username }, { setErrors }) => {
+      try {
+        setGeneralError("");
+        await authService.register({ email, password, username });
+        navigate("/login");
+      } catch (error) {
+        const errorMessage = getApiErrorMessage(error);
+        const regex = /user with \((\w+)\)=\((.*?)\) already exists/;
+        const match = errorMessage.match(regex);
+
+        if (match) {
+          const field = match[1];
+          setErrors({ [field]: `${field} already exists` });
+          return field;
+        }
+
+        return setGeneralError(errorMessage);
+      }
     },
   });
 
@@ -67,6 +84,7 @@ export const RegisterForm = () => {
               />
             </div>
           </div>
+          <ErrorMessage text={generalError} />
           <div className="mt-3 flex">
             <button type="submit" className="primary-btn mr-3 max-w-[48%] flex-1">
               Register

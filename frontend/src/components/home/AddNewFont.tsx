@@ -1,7 +1,7 @@
 import { useModal } from "@/state/modal";
 import React from "react";
 import { AddNewFontModal } from "../modals";
-import { classNames } from "@/utils/classNames";
+import { classNames } from "@/utils";
 
 type Props = {
   cardClasses: string;

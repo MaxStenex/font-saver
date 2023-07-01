@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { classNames } from "./classNames";
+import { classNames } from "./";
 
 describe("ClassNames test", () => {
   it("If string passed as argument, should return it", () => {

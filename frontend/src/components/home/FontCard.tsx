@@ -1,6 +1,6 @@
 import { FontType } from "@/types/font";
 import { SelectButton } from "@/uikit/buttons/SelectButton";
-import { classNames } from "@/utils/classNames";
+import { classNames } from "@/utils";
 import React, { useState } from "react";
 
 type Props = {
