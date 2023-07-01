@@ -24,12 +24,11 @@ export const LoginForm = () => {
       password: "",
     },
     validationSchema,
-    onSubmit: async (values, { setErrors }) => {
+    onSubmit: async (values) => {
       try {
         setGeneralError("");
-        const data = await authService.login(values);
-
-        // navigate("/");
+        await authService.login(values);
+        navigate("/");
       } catch (error) {
         setGeneralError(getApiErrorMessage(error));
       }

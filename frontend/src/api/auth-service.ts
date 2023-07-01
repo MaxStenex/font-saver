@@ -2,11 +2,11 @@ import { LoginDto, RegisterDto } from "@/types/auth";
 import { apiInstance } from "./instance";
 import { User } from "@/types/user";
 
-interface LoginResponseData {
+export interface LoginResponseData {
   accessToken: string;
 }
 
-interface RegisterResponseData extends User {}
+export interface RegisterResponseData extends User {}
 
 class AuthService {
   accessTokenStorageName = "at";
