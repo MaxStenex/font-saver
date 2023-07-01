@@ -82,8 +82,8 @@ export class AuthService {
       "Invalid email or password",
     );
 
-    const user = await this.userRepository.findOneByOrFail({
-      email,
+    const user = await this.userRepository.findOne({
+      where: { email },
     });
     if (!user) throw invalidCredsError;
 
