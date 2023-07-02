@@ -1,22 +1,24 @@
 import { LoginDto, RegisterDto } from "@/types/auth";
 import { apiInstance } from "./instance";
-import { User } from "@/types/user";
 
 export interface LoginResponseData {
   accessToken: string;
 }
 
-export interface RegisterResponseData extends User {}
+interface RefreshTokensResponseData {
+  accessToken: string;
+}
+
+export interface RegisterResponseData {
+  status: number;
+  message: string;
+}
 
 class AuthService {
-  accessTokenStorageName = "at";
+  accessToken: string = "";
 
-  saveAccessToken(token: string): void {
-    window.localStorage.setItem(this.accessTokenStorageName, token);
-  }
-
-  getAccessToken(): string | null {
-    return window.localStorage.getItem(this.accessTokenStorageName);
+  setAccessToken(token: string) {
+    this.accessToken = token;
   }
 
   async login({ email, password }: LoginDto) {
@@ -24,13 +26,25 @@ class AuthService {
       email,
       password,
     });
-    this.saveAccessToken(data.accessToken);
+    this.setAccessToken(data.accessToken);
 
     return data;
   }
 
   async register(dto: RegisterDto) {
     return await apiInstance.post<RegisterResponseData>("/users/create", dto);
+  }
+
+  async logout() {
+    await apiInstance.post("/auth/logout");
+    this.setAccessToken("");
+  }
+
+  async refreshTokens() {
+    const { data } = await apiInstance.post<RefreshTokensResponseData>(
+      "/auth/refresh-tokens"
+    );
+    this.setAccessToken(data.accessToken);
   }
 }
 
