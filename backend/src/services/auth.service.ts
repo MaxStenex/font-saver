@@ -55,7 +55,7 @@ export class AuthService {
     return {
       httpOnly: true,
       expires: new Date(Number(expiresIn)),
-      path: "/auth",
+      path: "*/auth",
     };
   }
 
