@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { HttpStatus, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import * as bcrypt from "bcrypt";
 import { RegisterUserDto } from "src/dtos";
@@ -21,6 +21,9 @@ export class UserService {
     });
     await this.userRepository.save(user);
 
-    return user;
+    return {
+      status: HttpStatus.OK,
+      message: "User registered successfully",
+    };
   }
 }
