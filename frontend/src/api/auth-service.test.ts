@@ -2,6 +2,8 @@ import { LoginDto, RegisterDto } from "@/types/auth";
 import axios from "axios";
 import { vi } from "vitest";
 import { LoginResponseData, authService } from "./auth-service";
+import { apiInstance } from "./instance";
+import { User } from "@/types/user";
 
 vi.mock("./instance", async () => {
   const instance = axios.create();
@@ -36,6 +38,12 @@ vi.mock("./instance", async () => {
 
   mock.onPost("/auth/refresh-tokens").reply(200, { accessToken: "ACCESS_TOKEN2" });
 
+  mock.onGet("/auth/me").reply<User>(200, {
+    id: 123,
+    email: "bob@bob.com",
+    username: "superbob",
+  });
+
   return { apiInstance: instance };
 });
 
@@ -57,7 +65,7 @@ describe("Auth service test", () => {
     });
 
     expect(data.accessToken).toBe("ACCESS_TOKEN");
-    expect(authService.accessToken).toBe("ACCESS_TOKEN");
+    expect(apiInstance.defaults.headers.common.Authorization).toBe("Bearer ACCESS_TOKEN");
   });
 
   it("Should return an error message, if user credentials are not valid", async () => {
@@ -74,18 +82,20 @@ describe("Auth service test", () => {
   });
 
   it("Should clear an access token from service after logout", async () => {
-    authService.setAccessToken("ACCESS_TOKEN");
+    apiInstance.defaults.headers.common.Authorization = "Bearer ACCESS_TOKEN";
 
     await authService.logout();
 
-    expect(authService.accessToken).toBe("");
+    expect(apiInstance.defaults.headers.common.Authorization).toBe("");
   });
 
   it("Should refresh access token, after successfull refresh-tokens request", async () => {
-    authService.setAccessToken("ACCESS_TOKEN1");
+    apiInstance.defaults.headers.common.Authorization = "Bearer ACCESS_TOKEN1";
 
     await authService.refreshTokens();
 
-    expect(authService.accessToken).toBe("ACCESS_TOKEN2");
+    expect(apiInstance.defaults.headers.common.Authorization).toBe(
+      "Bearer ACCESS_TOKEN2"
+    );
   });
 });

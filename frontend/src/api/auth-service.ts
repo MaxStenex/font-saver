@@ -1,5 +1,6 @@
 import { LoginDto, RegisterDto } from "@/types/auth";
 import { apiInstance } from "./instance";
+import { User } from "@/types/user";
 
 export interface LoginResponseData {
   accessToken: string;
@@ -15,10 +16,8 @@ export interface RegisterResponseData {
 }
 
 class AuthService {
-  accessToken: string = "";
-
-  setAccessToken(token: string) {
-    this.accessToken = token;
+  private setAccessToken(token: string) {
+    apiInstance.defaults.headers.common.Authorization = token ? `Bearer ${token}` : "";
   }
 
   async login({ email, password }: LoginDto) {
@@ -45,6 +44,12 @@ class AuthService {
       "/auth/refresh-tokens"
     );
     this.setAccessToken(data.accessToken);
+  }
+
+  async me() {
+    const { data } = await apiInstance.get<User>("/auth/me");
+
+    return data;
   }
 }
 
