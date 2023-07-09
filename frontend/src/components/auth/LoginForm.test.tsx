@@ -1,6 +1,5 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter, useNavigate } from "react-router-dom";
-import { describe, it, vi } from "vitest";
 import { LoginForm } from "./LoginForm";
 import { LoginResponseData, authService } from "@/api";
 import { LoginDto } from "@/types/auth";

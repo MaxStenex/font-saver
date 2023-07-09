@@ -1,6 +1,5 @@
 import { LoginDto, RegisterDto } from "@/types/auth";
 import axios from "axios";
-import { vi } from "vitest";
 import { LoginResponseData, authService } from "./auth-service";
 import { apiInstance } from "./instance";
 import { User } from "@/types/user";
