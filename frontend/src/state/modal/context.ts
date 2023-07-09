@@ -2,12 +2,12 @@ import { createContext } from "react";
 
 export type ModalComponentType = JSX.Element;
 
-type ModalStateType = {
+export type ModalActions = {
   addModal: (modal: ModalComponentType) => void;
   removeModal: () => void;
 };
 
-export const ModalContext = createContext<ModalStateType>({
+export const ModalContext = createContext<ModalActions>({
   addModal: () => {},
   removeModal: () => {},
 });
