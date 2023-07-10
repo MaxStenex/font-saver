@@ -1,5 +1,6 @@
 import { HomePage, LoginPage, RegisterPage } from "@/pages";
 import { createBrowserRouter } from "react-router-dom";
+import { PrivateRoute } from "./private-route";
 
 export const router = createBrowserRouter([
   {
@@ -12,11 +13,19 @@ export const router = createBrowserRouter([
   },
   {
     path: "/",
-    element: <HomePage />,
+    element: (
+      <PrivateRoute>
+        <HomePage />
+      </PrivateRoute>
+    ),
   },
   {
     path: "/home",
-    element: <HomePage />,
+    element: (
+      <PrivateRoute>
+        <HomePage />
+      </PrivateRoute>
+    ),
   },
   {
     path: "*",

@@ -39,7 +39,7 @@ class AuthService {
     this.setAccessToken("");
   }
 
-  async refreshTokens() {
+  async refreshTokens(): Promise<void> {
     const { data } = await apiInstance.post<RefreshTokensResponseData>(
       "/auth/refresh-tokens"
     );
