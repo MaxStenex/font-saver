@@ -5,7 +5,7 @@ import * as bcrypt from "bcrypt";
 import { v4 as uuidv4 } from "uuid";
 import { LoginDto } from "src/dtos/login.dto";
 import { RefreshSession, User } from "src/entities";
-import { UserJwtPayload } from "src/types/user";
+import { UserJwtPayload } from "src/types";
 import { Repository } from "typeorm";
 import { configService } from "src/config";
 import { Response } from "express";
@@ -41,13 +41,11 @@ export class AuthService {
     return refreshSession;
   }
 
-  validateAccessToken(token: string): boolean {
+  validateAccessToken(token: string): UserJwtPayload | null {
     try {
-      this.jwtService.verify<UserJwtPayload>(token);
-
-      return true;
+      return this.jwtService.verify<UserJwtPayload>(token);
     } catch (error) {
-      return false;
+      return null;
     }
   }
 
@@ -94,7 +92,7 @@ export class AuthService {
     const accessToken = await this.generateAccessToken({ id: user.id });
     this.setRefreshTokenInCookies({ refreshSession, response });
 
-    return { accessToken };
+    return { accessToken, user };
   }
 
   async refreshTokens({
@@ -159,5 +157,16 @@ export class AuthService {
       this.getRefreshTokenCookieSettings(refreshSession.expiresIn),
     );
     await this.refreshSessionRepository.remove(refreshSession);
+  }
+
+  async me({ userId }: { userId: number }) {
+    const user = await this.userRepository.findOne({
+      where: {
+        id: userId,
+      },
+    });
+    if (!user) throw new UnauthorizedException();
+
+    return user;
   }
 }

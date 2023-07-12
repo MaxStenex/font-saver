@@ -6,9 +6,9 @@ import {
   SetMetadata,
 } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
-import { Request } from "express";
 import { Observable } from "rxjs";
 import { AuthService } from "src/services";
+import { ModifiedRequest } from "src/types";
 
 const PUBLIC_REQUEST_METADATA_NAME = "isPublic";
 
@@ -28,14 +28,17 @@ export class AuthGuard implements CanActivate {
     );
     if (requestIsPublic) return true;
 
-    const request = context.switchToHttp().getRequest<Request>();
+    const request = context.switchToHttp().getRequest<ModifiedRequest>();
     const authHeader = request.headers.authorization;
     if (!authHeader) return false;
     const accessToken = authHeader.split(" ")[1];
     if (!accessToken) return false;
-    const tokenIsValid = this.authService.validateAccessToken(accessToken);
+    const tokenInfo = this.authService.validateAccessToken(accessToken);
+    if (tokenInfo) {
+      request.userInfo = tokenInfo;
+    }
 
-    return tokenIsValid;
+    return !!tokenInfo;
   }
 }
 

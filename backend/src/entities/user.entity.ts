@@ -1,4 +1,4 @@
-import { Exclude } from "class-transformer";
+import { Exclude, instanceToPlain } from "class-transformer";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { RefreshSession } from "./refresh-session.entity";
 
@@ -13,10 +13,14 @@ export class User {
   @Column({ type: "varchar", length: 64, unique: true })
   username: string;
 
-  @Exclude()
+  @Exclude({ toPlainOnly: true })
   @Column({ type: "varchar", length: 64 })
   password: string;
 
   @OneToMany(() => RefreshSession, (rs) => rs.user)
   refreshSessions: RefreshSession[];
+
+  toJSON() {
+    return instanceToPlain(this);
+  }
 }
